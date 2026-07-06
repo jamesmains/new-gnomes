@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f18c975b9c84453591cc36027f4c08ac, type: 3}
+  m_Name: 2 Audo Environment
+  m_EditorClassIdentifier: 
+  AmbientLoop: {fileID: 0}
+  AmbientVolume: 0.3
+  AmbientMixerGroup: {fileID: 0}
+  FootstepLibrary: {fileID: 0}
+  ReverbPreset: 0
+  Music: {fileID: 11400000, guid: ee4a27a1bf7d94dd6b871cdaf187550e, type: 2}

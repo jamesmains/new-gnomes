@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1afdddaa1d1b82a1fac09626f796cd27, type: 3}
+  m_Name: Demo Player Brain
+  m_EditorClassIdentifier: Assembly-CSharp::GNOMES.Actor.Core.PlayerBrain
+  Modules:
+  - rid: 2895847696945643601
+  - rid: 2895847696945643602
+  - rid: 2895847696945643603
+  Parent: {fileID: 0}
+  IsInstance: 0
+  Player: {fileID: 0}
+  DefaultCameraBehavior:
+    rid: 2895847696945643600
+  Linkers:
+  - {fileID: 11400000, guid: 8d93daaf3831a11d289e3fba8879d7eb, type: 2}
+  - {fileID: 11400000, guid: 897a9ac67a19117a19bff450440d91bd, type: 2}
+  - {fileID: 11400000, guid: 8e766460b89c80bccbac7fa3534ca309, type: 2}
+  - {fileID: 11400000, guid: 788e6ebf3b301c9258f2c1b501477248, type: 2}
+  - {fileID: 11400000, guid: df88675a9494fb82886cb9ca244a6cae, type: 2}
+  - {fileID: 11400000, guid: 3c6194842e854b966923e63dfdb565c6, type: 2}
+  references:
+    version: 2
+    RefIds:
+    - rid: 2895847696945643600
+      type: {class: DefaultCameraBehavior, ns: GNOMES.Demo.Scripts, asm: Assembly-CSharp}
+      data:
+        Offset: {x: 0, y: 0, z: 0}
+        Distance: 0
+        CameraPivot: {fileID: 0}
+        Sensitivity: 0.5
+        SmoothTime: 0.03
+        BobSpeed: 10
+        BobAmount: 0.05
+        BobSmoothing: 1
+        TiltAmount: 2
+        JuiceSmoothSpeed: 10
+    - rid: 2895847696945643601
+      type: {class: CameraModule, ns: Gnomes.Demo.Modules, asm: Assembly-CSharp}
+      data:
+        Camera: {fileID: 0}
+    - rid: 2895847696945643602
+      type: {class: InteractModule, ns: Gnomes.Demo.Modules, asm: Assembly-CSharp}
+      data: 
+    - rid: 2895847696945643603
+      type: {class: MovementModule, ns: Gnomes.Demo.Modules, asm: Assembly-CSharp}
+      data: 
