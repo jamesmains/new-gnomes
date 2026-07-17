@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using GNOMES.Runtime;
@@ -85,6 +86,9 @@ namespace GNOMES.Actor.Core {
 
         public T GetBehavior<T>(out T component) where T : class =>
             component = ActiveBehaviors.Find(b => b is T) as T;
+        
+        public ActorBehavior GetBehavior(Type type) 
+            => ActiveBehaviors.Find(b => type.IsAssignableFrom(b.GetType()));
 
         public bool HasBehavior<T>() where T : class =>
             ActiveBehaviors.Exists(b => b is T);
