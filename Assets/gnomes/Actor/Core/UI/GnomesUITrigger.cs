@@ -1,32 +1,21 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using GNOMES.Actor.Core;
 using GNOMES.Actor.Core.Scene;
 using UnityEngine;
-using UnityEngine.InputSystem.UI; // Needed for MultiplayerEventSystem configuration
 
 namespace gnomes.Actor.Core.UI {
     public class GnomesUITrigger : MonoBehaviour {
         [Header("UI Config")] 
         [Tooltip("Name of the action map to switch to. Must match your .inputactions asset.")]
-        public string UIActionMap = "UI"; //[cite: 4]
+        public string UIActionMap = "UI"; 
 
         [Tooltip("Cursor behavior while UI is active.")]
-        public GnomesCursorMode CursorMode = GnomesCursorMode.UnlockedVisible; //[cite: 4]
+        public GnomesCursorMode CursorMode = GnomesCursorMode.UnlockedVisible; 
 
         [Tooltip("The Screen-Space UI Canvas Prefab to spawn for the player.")]
         public Canvas UICanvasPrefab; 
 
         [Tooltip("Whether to auto-select the first selectable element for gamepad navigation.")]
-        public bool AutoSelectFirst = true; //[cite: 4]
-
-        [Header("Behaviors to Freeze")]
-        [Tooltip("Names of behavior types to freeze while UI is active.")]
-        public List<string> FreezeBehaviorTypeNames = new() {
-            "Movement3dBehavior",
-            "DefaultCameraBehavior"
-        }; //[cite: 4]
+        public bool AutoSelectFirst = true; 
 
         // Track spawned canvases per player index so we don't spawn duplicates
         private readonly Dictionary<int, Canvas> _spawnedPlayerCanvases = new();
@@ -34,9 +23,9 @@ namespace gnomes.Actor.Core.UI {
         // ── Public API ────────────────────────────────────────────────────────
 
         public void Open(GNOMES.Actor.Core.Actor actor) {
-            var slot = FindSlotForActor(actor); //[cite: 4]
+            var slot = FindSlotForActor(actor); 
             if (slot == null) {
-                Debug.LogWarning($"[Gnomes] GnomesUITrigger '{name}': no player slot found."); //[cite: 4]
+                Debug.LogWarning($"[Gnomes] GnomesUITrigger '{name}': no player slot found."); 
                 return;
             }
 
@@ -44,29 +33,27 @@ namespace gnomes.Actor.Core.UI {
             Canvas playerCanvas = GetOrCreateCanvasForPlayer(slot);
             if (playerCanvas == null) return;
 
-            Debug.Log($"[GNOMES UI] Opening {gameObject.name} for {actor} in slot {slot.PlayerIndex}."); //[cite: 4]
-            var types = ResolveTypes(FreezeBehaviorTypeNames); //[cite: 4]
+            Debug.Log($"[GNOMES UI] Opening {gameObject.name} for {actor} in slot {slot.PlayerIndex}."); 
 
             // 2. Pass the dedicated instance to their context
             GnomesUIContext.For(slot).Enter(new GnomesUIConfig {
-                UIActionMap = UIActionMap, //[cite: 4]
-                CursorMode = CursorMode, //[cite: 4]
+                UIActionMap = UIActionMap, 
+                CursorMode = CursorMode, 
                 WorldSpaceCanvas = playerCanvas, // Passing the player-owned instance
-                AutoSelectFirstElement = AutoSelectFirst, //[cite: 4]
-                FreezeBehaviorTypes = types //[cite: 4]
+                AutoSelectFirstElement = AutoSelectFirst
             });
         }
 
         public void Close(GNOMES.Actor.Core.Actor actor) {
-            var slot = FindSlotForActor(actor); //[cite: 4]
-            if (slot == null) return; //[cite: 4]
-            GnomesUIContext.For(slot).Exit(); //[cite: 4]
+            var slot = FindSlotForActor(actor); 
+            if (slot == null) return; 
+            GnomesUIContext.For(slot).Exit(); 
         }
 
         public void CloseAll(GNOMES.Actor.Core.Actor actor) {
-            var slot = FindSlotForActor(actor); //[cite: 4]
-            if (slot == null) return; //[cite: 4]
-            GnomesUIContext.For(slot).ExitAll(); //[cite: 4]
+            var slot = FindSlotForActor(actor); 
+            if (slot == null) return; 
+            GnomesUIContext.For(slot).ExitAll(); 
         }
 
         // ── Player-Isolated Spawning Logic ────────────────────────────────────
@@ -106,7 +93,7 @@ namespace gnomes.Actor.Core.UI {
             }
 
             // Route Unity's MultiplayerEventSystem to only look at this canvas branch
-            var multiEventSystem = slot.Player?.EventSystem as MultiplayerEventSystem;
+            var multiEventSystem = slot.Player?.EventSystem;
             if (multiEventSystem != null) {
                 multiEventSystem.playerRoot = spawnedCanvas.gameObject;
             }
@@ -116,26 +103,11 @@ namespace gnomes.Actor.Core.UI {
         }
 
         private static GnomesPlayerSlot FindSlotForActor(GNOMES.Actor.Core.Actor actor) {
-            if (actor == null) return null; //[cite: 4]
-            foreach (var slot in GnomesSceneManager.Instance.PlayerSlots) //[cite: 4]
-                if (slot.CurrentActor == actor) //[cite: 4]
-                    return slot; //[cite: 4]
-            return null; //[cite: 4]
-        }
-
-        private static Type[] ResolveTypes(List<string> names) {
-            if (names == null || names.Count == 0) return Array.Empty<Type>(); //[cite: 4]
-            var result = new List<Type>(); //[cite: 4]
-            foreach (var name in names) { //[cite: 4]
-                Type found = null; //[cite: 4]
-                foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies()) { //[cite: 4]
-                    found = assembly.GetTypes().FirstOrDefault(t => t.Name == name && typeof(ActorBehavior).IsAssignableFrom(t)); //[cite: 4]
-                    if (found != null) break; //[cite: 4]
-                }
-                if (found != null) result.Add(found); //[cite: 4]
-                else Debug.LogWarning($"[Gnomes] GnomesUITrigger: behavior type '{name}' not found."); //[cite: 4]
-            }
-            return result.ToArray(); //[cite: 4]
+            if (actor == null) return null; 
+            foreach (var slot in GnomesSceneManager.Instance.PlayerSlots) 
+                if (slot.CurrentActor == actor) 
+                    return slot; 
+            return null; 
         }
 
         // Clean up UI instances if the trigger object is destroyed or player leaves

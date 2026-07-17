@@ -228,6 +228,10 @@ namespace GNOMES.Actor.Core.Interaction
             OnInspectEnteredEvent?.Invoke(actor);
         }
 
+        public void ExitInspection() {
+            ExitInspection(InspectableActor);
+        }
+        
         internal void ExitInspection(Actor actor)
         {
             if (!_isBeingInspected || actor != InspectableActor) return;

@@ -42,7 +42,6 @@
 //    Unplug interaction     → ctx.Exit() + brain swap
 // ═════════════════════════════════════════════════════════════════════════════
 
-using System;
 using UnityEngine;
 
 namespace gnomes.Actor.Core.UI {
@@ -65,19 +64,6 @@ namespace gnomes.Actor.Core.UI {
         /// On Exit, the previous cursor state is automatically restored.
         /// </summary>
         public GnomesCursorMode CursorMode = GnomesCursorMode.UnlockedVisible;
-
-        /// <summary>
-        /// Types of ActorBehavior to freeze on Enter and unfreeze on Exit.
-        /// The context finds these by type on the player's current actor.
-        ///
-        /// Example:
-        ///   FreezeBehaviorTypes = new[]
-        ///   {
-        ///       typeof(Movement3dBehavior),
-        ///       typeof(DefaultCameraBehavior)
-        ///   }
-        /// </summary>
-        public Type[] FreezeBehaviorTypes = Array.Empty<Type>();
 
         /// <summary>
         /// Optional world-space canvas to enable on Enter and disable on Exit.

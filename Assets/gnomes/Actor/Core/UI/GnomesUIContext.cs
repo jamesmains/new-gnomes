@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using GNOMES.Actor.Core;
 using GNOMES.Actor.Core.Scene;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -67,9 +66,6 @@ namespace gnomes.Actor.Core.UI {
         private CursorLockMode _savedLockMode;
         private bool _savedCursorVisible;
 
-        // Behaviors frozen by the current top-of-stack config
-        private readonly List<ActorBehavior> _frozenBehaviors = new();
-
         // Canvas activated by the current top-of-stack config
         private Canvas _activeCanvas;
 
@@ -115,7 +111,6 @@ namespace gnomes.Actor.Core.UI {
             else {
                 // Deactivate the current top canvas before pushing a new context
                 SetCanvasActive(_activeCanvas, false);
-                UnfreezeBehaviors();
             }
 
             _configStack.Push(config);
@@ -144,7 +139,6 @@ namespace gnomes.Actor.Core.UI {
 
             // Deactivate what the exiting config activated
             SetCanvasActive(_activeCanvas, false);
-            UnfreezeBehaviors();
 
             if (_configStack.Count == 0) {
                 // Back to gameplay — restore all saved state
@@ -169,7 +163,6 @@ namespace gnomes.Actor.Core.UI {
             if (_configStack.Count == 0) return;
 
             SetCanvasActive(_activeCanvas, false);
-            UnfreezeBehaviors();
 
             var last = _configStack.Peek();
             _configStack.Clear();
@@ -188,9 +181,6 @@ namespace gnomes.Actor.Core.UI {
 
             // ── 2. Cursor ─────────────────────────────────────────────────────
             ApplyCursorMode(config.CursorMode);
-
-            // ── 3. Freeze behaviors ───────────────────────────────────────────
-            FreezeBehaviors(config.FreezeBehaviorTypes);
 
             // ── 4. Canvas ─────────────────────────────────────────────────────
             _activeCanvas = config.WorldSpaceCanvas;
@@ -252,8 +242,10 @@ namespace gnomes.Actor.Core.UI {
             if (!IsSinglePlayer()) {
                 // (Optional) If you have a custom software cursor script on the player UI, trigger it here:
                 // GetPlayerVirtualCursor()?.SetVisible(mode != GnomesCursorMode.LockedHidden);
+                Debug.Log($"[GNOMES UI] MultiPlayer Mode detected. Ignoring cursor mode: {mode}");
                 return;
             }
+            else Debug.Log($"[GNOMES UI] SinglePlayer Mode detected. Using cursor mode: {mode}");
 
             // Fallback for single-player hardware mouse control
             switch (mode) {
@@ -270,53 +262,6 @@ namespace gnomes.Actor.Core.UI {
                     Cursor.visible = true;
                     break;
             }
-        }
-
-        // ── Behavior freeze helpers ───────────────────────────────────────────
-
-        private void FreezeBehaviors(Type[] types) {
-            _frozenBehaviors.Clear();
-            if (types == null || types.Length == 0) return;
-
-            var actor = _slot?.CurrentActor;
-            if (actor == null) return;
-
-            foreach (var type in types) {
-                // GetBehavior<T> requires a generic — we use reflection here
-                // because the types are runtime values, not compile-time generics.
-                // This is called only on Enter, never per frame, so the cost
-                // is acceptable.
-                var behavior = FindBehaviorByType(actor, type);
-                if (behavior == null) continue;
-
-                // Todo: Reimplement freeze
-                //behavior.Freeze();
-                _frozenBehaviors.Add(behavior);
-            }
-        }
-
-        private void UnfreezeBehaviors() {
-            // Todo: Reimplement freeze
-            // foreach (var b in _frozenBehaviors)
-            // b?.Unfreeze();
-            _frozenBehaviors.Clear();
-        }
-
-        private static ActorBehavior FindBehaviorByType(GNOMES.Actor.Core.Actor actor, Type type) {
-            // Walk the actor's active behaviors via reflection since GetBehavior<T>
-            // is generic and we have a runtime Type instead
-            var field = typeof(GNOMES.Actor.Core.Actor).GetField("ActiveBehaviors",
-                System.Reflection.BindingFlags.NonPublic |
-                System.Reflection.BindingFlags.Instance);
-
-            if (field?.GetValue(actor) is not List<ActorBehavior> behaviors)
-                return null;
-
-            foreach (var b in behaviors)
-                if (b != null && type.IsInstanceOfType(b))
-                    return b;
-
-            return null;
         }
 
         // ── Canvas helpers ────────────────────────────────────────────────────
@@ -375,8 +320,8 @@ namespace gnomes.Actor.Core.UI {
         // Helper to determine if we need to worry about global cursor hijacking
         private bool IsSinglePlayer() {
             // Check your SceneManager or InputSystem to see how many players are active
-            if (GNOMES.Actor.Core.Scene.GnomesSceneManager.Instance?.PlayerSlots == null) return true;
-            return GNOMES.Actor.Core.Scene.GnomesSceneManager.Instance.PlayerSlots.Count <= 1;
+            if (GnomesSceneManager.Instance?.PlayerSlots == null) return true;
+            return GnomesSceneManager.Instance.PlayerSlots.Count <= 1;
         }
     }
 }

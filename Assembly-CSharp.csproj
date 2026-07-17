@@ -74,8 +74,8 @@
     <Compile Include="Assets/gnomes/Actor/Core/Scene/GnomesTransitionCanvas.cs" />
     <Compile Include="Assets/gnomes/Actor/Core/UI/GnomesUITrigger.cs" />
     <Compile Include="Assets/gnomes/Actor/Serialization/ActorSave.cs" />
-    <Compile Include="Assets/gnomes/Actor/Core/UI/GnomesUIContext.cs" />
     <Compile Include="Assets/gnomes/Demo/Scripts/GnomesPickupBehavior.cs" />
+    <Compile Include="Assets/gnomes/Actor/Core/UI/GnomesUIContext.cs" />
     <Compile Include="Assets/gnomes/Actor/Core/Interaction/InteractionOptionSet.cs" />
     <Compile Include="Assets/gnomes/Demo/Scripts/DefaultCameraBehavior.cs" />
     <Compile Include="Assets/gnomes/Demo/Scripts/Movement3dBehavior.cs" />
@@ -97,6 +97,7 @@
     <Compile Include="Assets/gnomes/Demo/Scripts/Generated/InteractModule.cs" />
     <Compile Include="Assets/gnomes/Actor/Serialization/ISaveable.cs" />
     <Compile Include="Assets/gnomes/Demo/Scripts/Generated/MovementModule.cs" />
+    <Compile Include="Assets/gnomes/Actor/Core/BehaviorCommunicator.cs" />
     <Compile Include="Assets/gnomes/Actor/Core/ActorBrain.cs" />
     <Compile Include="Assets/gnomes/Actor/Core/Actor.cs" />
     <Compile Include="Assets/gnomes/Runtime/RequiresModuleAttribute.cs" />
