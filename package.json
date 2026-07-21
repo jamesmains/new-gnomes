@@ -1,0 +1,14 @@
+{
+  "name": "com.jamesmains.gnomes",
+  "version": "1.0.0",
+  "displayName": "Gnomes Core",
+  "description": "Core C# scripts and framework for Gnomes.",
+  "unity": "6.3",
+  "samples": [
+    {
+      "displayName": "Gnomes Demo",
+      "description": "Demo scenes and starter ScriptableObjects.",
+      "path": "Samples~/BasicDemo"
+    }
+  ]
+}
